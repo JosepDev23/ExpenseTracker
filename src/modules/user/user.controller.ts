@@ -6,11 +6,11 @@ import User from './user.schema'
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  async getAllUsers(): Promise<User[]> {
+  async getAll(): Promise<User[]> {
     return this.userService.findAll()
   }
 
-  async getUserById(id: string): Promise<User> {
+  async getById(id: string): Promise<User> {
     return this.userService.findById(id)
   }
 }
