@@ -6,11 +6,11 @@ import Transaction from './transaction.schema'
 export class TransactionController {
   constructor(private readonly transactionService: TransactionService) {}
 
-  async getAllTransactions(): Promise<Transaction[]> {
+  async findAll(): Promise<Transaction[]> {
     return this.transactionService.findAll()
   }
 
-  async getTransactionById(id: string): Promise<Transaction> {
+  async findById(id: string): Promise<Transaction> {
     return this.transactionService.findById(id)
   }
 }

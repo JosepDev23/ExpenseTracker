@@ -1,5 +1,4 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Date } from 'mongoose'
 
 @Schema()
 export default class Transaction {
