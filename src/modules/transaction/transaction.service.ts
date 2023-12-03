@@ -6,7 +6,7 @@ import { Model } from 'mongoose'
 @Injectable()
 export class TransactionService {
   constructor(
-    @InjectModel('transaction') private TransactionModel: Model<Transaction>,
+    @InjectModel('Transaction') private TransactionModel: Model<Transaction>,
   ) {}
 
   async findAll(): Promise<Transaction[]> {
