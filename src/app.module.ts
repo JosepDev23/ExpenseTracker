@@ -5,7 +5,7 @@ import { ConfigModule } from '@nestjs/config'
 import { MongooseModule } from '@nestjs/mongoose'
 
 @Module({
-  imports: [
+  imports: [TransactionModule, UserModule
     ConfigModule.forRoot(),
     MongooseModule.forRoot(
       `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@${process.env.MONGODB_CLUSTER}.r1btshc.mongodb.net/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`,
