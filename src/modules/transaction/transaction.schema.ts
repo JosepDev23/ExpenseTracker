@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { ApiProperty } from '@nestjs/swagger'
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 
 @Schema()
 export default class Transaction {
@@ -17,6 +17,7 @@ export default class Transaction {
 
   @Prop()
   @ApiProperty()
+  @ApiPropertyOptional()
   description: string
 }
 
