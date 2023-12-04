@@ -1,7 +1,15 @@
-import { Controller, Get } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Post,
+} from '@nestjs/common'
 import { UserService } from './user.service'
 import User from './user.schema'
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { RegisterDTO } from './dto/register.dto'
 
 @Controller('user')
 @ApiTags('User')
@@ -15,7 +23,7 @@ export class UserController {
     description: 'Users found successfully.',
     type: User,
   })
-  async getAll(): Promise<User[]> {
+  async findAll(): Promise<User[]> {
     return this.userService.findAll()
   }
 
@@ -32,7 +40,22 @@ export class UserController {
     type: String,
     description: 'User id',
   })
-  async getById(id: string): Promise<User> {
+  async findById(id: string): Promise<User> {
     return this.userService.findById(id)
+  }
+
+  @Post('/register')
+  @ApiOperation({ summary: 'Register a new user' })
+  @ApiResponse({
+    status: 201,
+    description: 'User registered successfully.',
+    type: User,
+  })
+  async register(@Body() registerDTO: RegisterDTO): Promise<User> {
+    try {
+      return await this.userService.register(registerDTO)
+    } catch (error) {
+      throw new HttpException(error.toString(), HttpStatus.BAD_REQUEST)
+    }
   }
 }
