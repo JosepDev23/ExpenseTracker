@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common'
 import User from './user.schema'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { RegisterDTO } from './dto/register.dto'
+import { RegisterDto } from './dto/register.dto'
 import { JwtService } from '@nestjs/jwt'
 import { hash } from 'bcrypt'
+import { LoginDto } from './dto/login.dto'
 
 @Injectable()
 export class UserService {
@@ -21,7 +22,7 @@ export class UserService {
     return this.UserModel.findById(id)
   }
 
-  async register(registerDTO: RegisterDTO): Promise<User> {
+  async register(registerDTO: RegisterDto): Promise<User> {
     const { password } = registerDTO
     const plainToHash = await hash(password, 10)
 
@@ -34,5 +35,9 @@ export class UserService {
     } catch (error) {
       throw new Error('Error during user registration')
     }
+  }
+
+  async login(loginDTO: LoginDto): Promise<User> {
+    return null
   }
 }

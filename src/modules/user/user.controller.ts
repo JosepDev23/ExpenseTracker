@@ -9,7 +9,8 @@ import {
 import { UserService } from './user.service'
 import User from './user.schema'
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
-import { RegisterDTO } from './dto/register.dto'
+import { LoginDto } from './dto/login.dto'
+import { RegisterDto } from './dto/register.dto'
 
 @Controller('user')
 @ApiTags('User')
@@ -51,11 +52,26 @@ export class UserController {
     description: 'User registered successfully.',
     type: User,
   })
-  async register(@Body() registerDTO: RegisterDTO): Promise<User> {
+  async register(@Body() registerDTO: RegisterDto): Promise<User> {
     try {
       return await this.userService.register(registerDTO)
     } catch (error) {
       throw new HttpException(error.toString(), HttpStatus.BAD_REQUEST)
+    }
+  }
+
+  @Post('/login')
+  @ApiOperation({ summary: 'Login a user' })
+  @ApiResponse({
+    status: 201,
+    description: 'User login successfully.',
+    type: User,
+  })
+  async login(@Body() loginDTO: LoginDto): Promise<User> {
+    try {
+      return null
+    } catch (error) {
+      return null
     }
   }
 }
