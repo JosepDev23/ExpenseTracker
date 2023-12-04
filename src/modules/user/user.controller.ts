@@ -67,11 +67,11 @@ export class UserController {
     description: 'User login successfully.',
     type: User,
   })
-  async login(@Body() loginDTO: LoginDto): Promise<User> {
+  async login(@Body() loginDto: LoginDto) {
     try {
-      return null
+      return await this.userService.login(loginDto)
     } catch (error) {
-      return null
+      throw new HttpException(error.toString(), HttpStatus.BAD_REQUEST)
     }
   }
 }

@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common'
+import { HttpException, Injectable } from '@nestjs/common'
 import User from './user.schema'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { RegisterDto } from './dto/register.dto'
 import { JwtService } from '@nestjs/jwt'
-import { hash } from 'bcrypt'
+import { compare, hash } from 'bcrypt'
 import { LoginDto } from './dto/login.dto'
 
 @Injectable()
@@ -33,11 +33,35 @@ export class UserService {
       })
       return savedUser.save()
     } catch (error) {
-      throw new Error('Error during user registration')
+      throw new HttpException(
+        'Error during user registration: ' + error.message,
+        500,
+      )
     }
   }
 
-  async login(loginDTO: LoginDto): Promise<User> {
-    return null
+  async login(loginDto: LoginDto): Promise<{ user: User; token: string }> {
+    const { username, password } = loginDto
+    try {
+      let findUser = await this.UserModel.findOne({ username })
+      if (!findUser) throw new HttpException('User not found', 404)
+
+      const isPasswordValid = await compare(password, findUser.password)
+      if (!isPasswordValid) {
+        throw new HttpException('WRONG_PASSWORD', 403)
+      }
+
+      const payload = { id: findUser._id, name: findUser.username }
+      const token = this.jwtService.sign(payload)
+
+      const data = {
+        user: findUser,
+        token,
+      }
+
+      return data
+    } catch (error) {
+      throw new HttpException('Error during user login: ' + error.message, 500)
+    }
   }
 }
