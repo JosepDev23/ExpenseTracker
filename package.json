@@ -28,6 +28,7 @@
     "@nestjs/swagger": "^7.1.16",
     "@types/mongoose": "^5.11.97",
     "class-validator": "^0.14.0",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.3.0",
     "mongoose": "^8.0.2",
     "reflect-metadata": "^0.1.13",
