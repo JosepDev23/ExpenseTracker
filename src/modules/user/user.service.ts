@@ -48,7 +48,7 @@ export class UserService {
 
       const isPasswordValid = await compare(password, findUser.password)
       if (!isPasswordValid) {
-        throw new HttpException('WRONG_PASSWORD', 403)
+        throw new HttpException('Incorrect password', 403)
       }
 
       const payload = { id: findUser._id, name: findUser.username }
