@@ -16,7 +16,6 @@ export default class Transaction {
   date: Date
 
   @Prop()
-  @ApiProperty()
   @ApiPropertyOptional()
   description: string
 }
