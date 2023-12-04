@@ -22,13 +22,13 @@ export class UserService {
     return this.UserModel.findById(id)
   }
 
-  async register(registerDTO: RegisterDto): Promise<User> {
-    const { password } = registerDTO
+  async register(registerDto: RegisterDto): Promise<User> {
+    const { password } = registerDto
     const plainToHash = await hash(password, 10)
 
     try {
       const savedUser = new this.UserModel({
-        ...registerDTO,
+        ...registerDto,
         password: plainToHash,
       })
       return savedUser.save()

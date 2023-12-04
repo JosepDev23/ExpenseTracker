@@ -52,9 +52,9 @@ export class UserController {
     description: 'User registered successfully.',
     type: User,
   })
-  async register(@Body() registerDTO: RegisterDto): Promise<User> {
+  async register(@Body() registerDto: RegisterDto): Promise<User> {
     try {
-      return await this.userService.register(registerDTO)
+      return await this.userService.register(registerDto)
     } catch (error) {
       throw new HttpException(error.toString(), HttpStatus.BAD_REQUEST)
     }
