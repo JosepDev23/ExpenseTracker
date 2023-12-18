@@ -55,12 +55,12 @@ export class UserService {
       const payload = { id: user._id, phoneNumber: user.phoneNumber }
       const token = this.jwtService.sign(payload)
 
-      const data: JWTUser = {
+      const jwtUser: JWTUser = {
         user,
         token,
       }
 
-      return data
+      return jwtUser
     } catch (error) {
       throw new HttpException('Error during user login: ' + error.message, 500)
     }
