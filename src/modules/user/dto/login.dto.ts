@@ -4,10 +4,9 @@ import { IsNotEmpty, Length } from 'class-validator'
 export class LoginDto {
   @IsNotEmpty()
   @ApiProperty()
-  username: string
+  phoneNumber: string
 
   @IsNotEmpty()
-  @Length(6, 20)
   @ApiProperty()
   password: string
 }

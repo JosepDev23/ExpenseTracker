@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { ApiProperty } from '@nestjs/swagger'
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 
 @Schema()
 export default class User {
@@ -16,7 +16,7 @@ export default class User {
   phoneNumber: number
 
   @Prop()
-  @ApiProperty()
+  @ApiPropertyOptional()
   currency: number
 }
 

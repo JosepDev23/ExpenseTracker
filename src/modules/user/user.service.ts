@@ -41,9 +41,9 @@ export class UserService {
   }
 
   async login(loginDto: LoginDto): Promise<{ user: User; token: string }> {
-    const { username, password } = loginDto
+    const { phoneNumber, password } = loginDto
     try {
-      let findUser = await this.UserModel.findOne({ username })
+      let findUser = await this.UserModel.findOne({ phoneNumber })
       if (!findUser) throw new HttpException('User not found', 404)
 
       const isPasswordValid = await compare(password, findUser.password)
@@ -51,7 +51,7 @@ export class UserService {
         throw new HttpException('Incorrect password', 403)
       }
 
-      const payload = { id: findUser._id, name: findUser.username }
+      const payload = { id: findUser._id, phoneNumber: findUser.phoneNumber }
       const token = this.jwtService.sign(payload)
 
       const data = {
