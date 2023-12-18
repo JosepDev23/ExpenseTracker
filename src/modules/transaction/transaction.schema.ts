@@ -18,6 +18,10 @@ export default class Transaction {
   @Prop()
   @ApiPropertyOptional()
   description: string
+
+  @Prop({ index: true })
+  @ApiProperty()
+  userId: string
 }
 
 export const TransactionSchema = SchemaFactory.createForClass(Transaction)

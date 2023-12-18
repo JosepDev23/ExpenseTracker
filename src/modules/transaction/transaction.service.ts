@@ -10,10 +10,18 @@ export class TransactionService {
   ) {}
 
   async findAll(): Promise<Transaction[]> {
-    return this.TransactionModel.find()
+    return this.TransactionModel.find().exec()
   }
 
   async findById(id: string): Promise<Transaction> {
-    return this.TransactionModel.findById(id)
+    return this.TransactionModel.findById(id).exec()
+  }
+
+  async findByUserId(userId: string): Promise<Transaction[]> {
+    return this.TransactionModel.find({ userId }).exec()
+  }
+
+  async create(transaction: Transaction): Promise<Transaction> {
+    return this.TransactionModel.create(transaction)
   }
 }

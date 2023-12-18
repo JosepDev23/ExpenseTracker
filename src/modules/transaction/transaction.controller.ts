@@ -1,7 +1,13 @@
-import { Controller, Get, Param } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post } from '@nestjs/common'
 import { TransactionService } from './transaction.service'
 import Transaction from './transaction.schema'
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
+import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger'
 
 @Controller('transaction')
 @ApiTags('Transaction')
@@ -34,5 +40,34 @@ export class TransactionController {
   })
   async findById(@Param('id') id: string): Promise<Transaction> {
     return this.transactionService.findById(id)
+  }
+
+  @Get(':userId')
+  @ApiOperation({ summary: 'Return an array of transactions by its userId' })
+  @ApiResponse({
+    status: 200,
+    description: 'Transactions found successfully.',
+    type: Transaction,
+  })
+  @ApiParam({
+    name: 'userId',
+    required: true,
+    type: String,
+    description: 'user id',
+  })
+  async findByUserId(@Param('userId') userId: string): Promise<Transaction[]> {
+    return this.transactionService.findByUserId(userId)
+  }
+
+  @Post()
+  @ApiOperation({ summary: 'creates a transaction' })
+  @ApiResponse({
+    status: 201,
+    description: 'Transaction created successfully',
+    type: Transaction,
+  })
+  @ApiBody({ type: Transaction })
+  async post(@Body() transaction: Transaction): Promise<Transaction> {
+    return this.transactionService.create(transaction)
   }
 }
