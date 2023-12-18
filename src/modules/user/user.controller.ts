@@ -11,6 +11,7 @@ import User from './user.schema'
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { LoginDto } from './dto/login.dto'
 import { RegisterDto } from './dto/register.dto'
+import { JWTUser } from './jwt-user.model'
 
 @Controller('user')
 @ApiTags('User')
@@ -65,11 +66,14 @@ export class UserController {
   @ApiResponse({
     status: 201,
     description: 'User login successfully.',
-    type: User,
+    type: JWTUser,
   })
-  async login(@Body() loginDto: LoginDto) {
+  async login(@Body() loginDto: LoginDto): Promise<JWTUser> {
     try {
-      return await this.userService.login(loginDto)
+      const result = await this.userService.login(loginDto)
+      const jwtUser = new JWTUser(result.user, result.token)
+
+      return jwtUser
     } catch (error) {
       throw new HttpException(error.toString(), HttpStatus.BAD_REQUEST)
     }

@@ -6,6 +6,7 @@ import { RegisterDto } from './dto/register.dto'
 import { JwtService } from '@nestjs/jwt'
 import { compare, hash } from 'bcrypt'
 import { LoginDto } from './dto/login.dto'
+import { JWTUser } from './jwt-user.model'
 
 @Injectable()
 export class UserService {
@@ -40,22 +41,22 @@ export class UserService {
     }
   }
 
-  async login(loginDto: LoginDto): Promise<{ user: User; token: string }> {
+  async login(loginDto: LoginDto): Promise<JWTUser> {
     const { phoneNumber, password } = loginDto
     try {
-      let findUser = await this.UserModel.findOne({ phoneNumber })
-      if (!findUser) throw new HttpException('User not found', 404)
+      let user = await this.UserModel.findOne({ phoneNumber })
+      if (!user) throw new HttpException('User not found', 404)
 
-      const isPasswordValid = await compare(password, findUser.password)
+      const isPasswordValid = await compare(password, user.password)
       if (!isPasswordValid) {
         throw new HttpException('Incorrect password', 403)
       }
 
-      const payload = { id: findUser._id, phoneNumber: findUser.phoneNumber }
+      const payload = { id: user._id, phoneNumber: user.phoneNumber }
       const token = this.jwtService.sign(payload)
 
-      const data = {
-        user: findUser,
+      const data: JWTUser = {
+        user,
         token,
       }
 
