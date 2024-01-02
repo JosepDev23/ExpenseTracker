@@ -1,7 +1,17 @@
-import { Controller, Get } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Post,
+} from '@nestjs/common'
 import { UserService } from './user.service'
 import User from './user.schema'
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { LoginDto } from './dto/login.dto'
+import { RegisterDto } from './dto/register.dto'
+import { JWTUser } from './jwt-user.model'
 
 @Controller('user')
 @ApiTags('User')
@@ -15,7 +25,7 @@ export class UserController {
     description: 'Users found successfully.',
     type: User,
   })
-  async getAll(): Promise<User[]> {
+  async findAll(): Promise<User[]> {
     return this.userService.findAll()
   }
 
@@ -32,7 +42,40 @@ export class UserController {
     type: String,
     description: 'User id',
   })
-  async getById(id: string): Promise<User> {
+  async findById(id: string): Promise<User> {
     return this.userService.findById(id)
+  }
+
+  @Post('/register')
+  @ApiOperation({ summary: 'Register a new user' })
+  @ApiResponse({
+    status: 201,
+    description: 'User registered successfully.',
+    type: User,
+  })
+  async register(@Body() registerDto: RegisterDto): Promise<User> {
+    try {
+      return await this.userService.register(registerDto)
+    } catch (error) {
+      throw new HttpException(error.toString(), HttpStatus.BAD_REQUEST)
+    }
+  }
+
+  @Post('/login')
+  @ApiOperation({ summary: 'Login a user' })
+  @ApiResponse({
+    status: 201,
+    description: 'User login successfully.',
+    type: JWTUser,
+  })
+  async login(@Body() loginDto: LoginDto): Promise<JWTUser> {
+    try {
+      const result = await this.userService.login(loginDto)
+      const jwtUser = new JWTUser(result.user, result.token)
+
+      return jwtUser
+    } catch (error) {
+      throw new HttpException(error.toString(), HttpStatus.BAD_REQUEST)
+    }
   }
 }
